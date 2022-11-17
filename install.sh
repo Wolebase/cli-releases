@@ -34,21 +34,21 @@ detect_arch() {
     arch="$(uname -m | tr '[:upper:]' '[:lower:]')"
 
     case "${arch}" in
-        x86_64) arch="x64" ;;
-        amd64) arch="x64" ;;
+        x86_64) arch="x86_64" ;;
+        amd64) arch="x86_64" ;;
         armv*) arch="arm" ;;
         arm64 | aarch64) arch="aarch64" ;;
     esac
 
     # `uname -m` in some cases mis-reports 32-bit OS as 64-bit, so double check
-    if [ "${arch}" = "x64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
+    if [ "${arch}" = "x86_64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
         arch=i686
     elif [ "${arch}" = "aarch64" ] && [ "$(getconf LONG_BIT)" -eq 32 ]; then
         arch=arm
     fi
 
     case "$arch" in
-        x64*) ;;
+        x86_64*) ;;
         aarch64*) ;;
         *) return 1 ;;
     esac
@@ -68,9 +68,9 @@ clean() { rm -rf "$tmp"; }
 trap clean EXIT
 
 if command -v curl > /dev/null 2>&1; then
-    curl -fsS --retry 5 -o "$tmp/faikers-cli.tar.xz" "$archive_url"
+    curl -fsSL --retry 5 -o "$tmp/faikers-cli.tar.xz" "$archive_url"
 else
-    wget -q -O "$tmp/faikers-cli.tar.xz" "$1"
+    wget -qO "$tmp/faikers-cli.tar.xz" "$archive_url"
 fi
 
 tar --directory "$tmp" --extract --file "$tmp/faikers-cli.tar.xz"
