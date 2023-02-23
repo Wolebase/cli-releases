@@ -58,9 +58,9 @@ detect_arch() {
 # End https://get.pnpm.io/install.sh
 
 platform="$(detect_platform)"
-arch="$(detect_arch)" || abort "Sorry! Faikers currently only provides binaries for x86_64/arm64 architectures."
-archive_url="https://github.com/Faikers/cli-releases/releases/latest/download/faikers-cli-${arch}-${platform}.tar.xz"
-validate_url "$archive_url" || abort "Sorry! it looks like Faikers is not available for your configuration"
+arch="$(detect_arch)" || abort "Sorry! Wolebase currently only provides binaries for x86_64/arm64 architectures."
+archive_url="https://github.com/Wolebase/cli-releases/releases/latest/download/wolebase-cli-${arch}-${platform}.tar.xz"
+validate_url "$archive_url" || abort "Sorry! it looks like Wolebase is not available for your configuration"
 
 prefix='/usr/local'
 tmp="$(mktemp -d)"
@@ -68,12 +68,12 @@ clean() { rm -rf "$tmp"; }
 trap clean EXIT
 
 if command -v curl > /dev/null 2>&1; then
-    curl -fsSL --retry 5 -o "$tmp/faikers-cli.tar.xz" "$archive_url"
+    curl -fsSL --retry 5 -o "$tmp/wolebase-cli.tar.xz" "$archive_url"
 else
-    wget -qO "$tmp/faikers-cli.tar.xz" "$archive_url"
+    wget -qO "$tmp/wolebase-cli.tar.xz" "$archive_url"
 fi
 
-tar --directory "$tmp" --extract --file "$tmp/faikers-cli.tar.xz"
+tar --directory "$tmp" --extract --file "$tmp/wolebase-cli.tar.xz"
 
 run='sudo'
 if test -d "$prefix/bin" && test -w "$prefix/bin"; then
@@ -88,6 +88,6 @@ if [ "$run" = "sudo" ] && ! command -v "$run" >/dev/null; then
 fi
 
 "$run" install -d "$prefix/bin" || abort "Failed to create $prefix/bin"
-"$run" install -m 0755 "$tmp/faikers" "$prefix/bin/faikers" || abort "Failed to install"
+"$run" install -m 0755 "$tmp/wolebase" "$prefix/bin/wolebase" || abort "Failed to install"
 
-echo "The Faikers CLI is installed!" 1>&2
+echo "The Wolebase CLI is installed!" 1>&2
